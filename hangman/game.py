@@ -15,26 +15,29 @@ def init_state(secret: str, max_tries: int) -> dict:
 
 def validate_guess(ch: str, guessed: set[str]) -> tuple[bool, str]:
     if len(ch) != 1:
-        return False, "Only one letter"
+        return False, "Only one letter."
     if ch not in hebrew_alphabet:
-        return False, 'not valid for only Hebrew letters.'
+        return False, 'not valid, only Hebrew letters.'
     if ch in guessed:
-        return False, 'the letter is alredy guessed'
+        return False, 'the letter is alredy guessed.'
     else:
         return True, 'keep going'
 
 def apply_guess(state: dict, ch: str) -> bool:
     state["guessed"].add(ch)
     if ch not in state["secret"]:
+        print("You guessed wrong.")
         state["wrong_guesses"]+=1
         return False
     else:
-        a = state["secret"].index(ch)
-        state["display"][a] = ch
+        for index,char in enumerate(state["secret"]):
+            if char == ch:
+                state["display"][index] = ch
         return True
 
+
 def is_won(state: dict) -> bool:
-    if state["display"] != "_" :
+    if "_" not in state["display"]:
         return True
     else:
         return False
